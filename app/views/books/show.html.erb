@@ -35,6 +35,9 @@
 
             <% end %>
             </td>
+            <td>
+              <p>コメント件数：<%= @book.book_comments.count %></p>
+            </td>
             <% if @user.id == current_user.id %>
               <td>
                 <%=link_to "Edit", edit_book_path(@book), class:"btn btn-sm btn-success" %>
@@ -44,8 +47,44 @@
               </td>
             <% end %>
           </tr>
+          <% @book.book_comments.each do |book_comment| %>
+          <tr>
+            <td>
+              <p><%= attachment_image_tag book_comment.user, :profile_image, format: 'jpeg', fallback:'no_image.jpeg', size: "60x60" %></p>
+              <%= link_to book_comment.user.name, user_path(book_comment.user) %>
+            </td>
+            <td>
+              <%= book_comment.comment %>
+            </td>
+            <td>
+              <% if book_comment.user == current_user %>
+                <div class="comment-delete">
+                  <%= link_to "Destroy", book_book_comments_path(book_comment.book, book_comment), class:"btn btn-sm btn-danger", method: :delete %>
+                </div>
+              <% end %>
+            </td>
+          </tr>
+          <% end %>
+          <tr>
+          </tr>
         </tbody>
       </table>
+      <% if @book_comment.errors.any? %>
+        <h2>
+          <%= @book_comment.errors.count %> errors prohibited this book from being saved:
+        </h2>
+        <ul>
+          <% @book_comment.errors.full_messages.each do |message| %>
+            <li><%= message %></li>
+          <% end %>
+        </ul>
+      <% end %>
+      <div class="new-comment">
+        <%= form_with(model:[@book, @book_comment], local: true) do |f| %>
+          <%= f.text_area :comment, rows:'5',placeholder: "コメントをここに" %>
+          <%= f.submit "送信" %>
+        <% end %>
+      </div>
     </div>
   </div>
 </div>
