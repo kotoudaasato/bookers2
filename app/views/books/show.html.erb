@@ -59,7 +59,7 @@
             <td>
               <% if book_comment.user == current_user %>
                 <div class="comment-delete">
-                  <%= link_to "Destroy", book_book_comments_path(book_comment.book, book_comment), class:"btn btn-sm btn-danger", method: :delete %>
+                  <%= link_to "Destroy", book_book_comment_path(book_comment.book, book_comment), class:"btn btn-sm btn-danger", method: :delete %>
                 </div>
               <% end %>
             </td>
